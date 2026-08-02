@@ -17,16 +17,16 @@ public class UnitService {
     }
 
     public List<UnitResponse> getAllUnits() {
-        return unitRepository.findAll()
+        return unitRepository.findByStatus("ACTIVE")
                 .stream()
                 .map(this::mapToResponse)
                 .toList();
     }
 
     public UnitResponse getUnitById(Long id) {
-        return unitRepository.findById(id)
+        return unitRepository.findByIdAndStatus(id, "ACTIVE")
                 .map(this::mapToResponse)
-                .orElseThrow(() -> new RuntimeException("Unit not found with id: " + id));
+                .orElseThrow(() -> new RuntimeException("Active unit not found with id: " + id));
     }
 
     public UnitResponse createUnit(UnitRequest request) {
@@ -51,6 +51,14 @@ public class UnitService {
     public UnitResponse updateUnit(Long id, UnitRequest request) {
         Unit unit = unitRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Unit not found with id: " + id));
+
+        if (unitRepository.existsByNameAndIdNot(request.getName(), id)) {
+            throw new RuntimeException("Unit name already exists");
+        }
+
+        if (unitRepository.existsByShortNameAndIdNot(request.getShortName(), id)) {
+            throw new RuntimeException("Unit short name already exists");
+        }
 
         unit.setName(request.getName());
         unit.setShortName(request.getShortName());
