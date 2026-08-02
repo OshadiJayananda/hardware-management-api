@@ -1,7 +1,9 @@
 package com.hw.hardwaremanagement.unit;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.List;
 import java.util.Optional;
+
+import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UnitRepository extends JpaRepository<Unit, Long> {
 
@@ -9,5 +11,11 @@ public interface UnitRepository extends JpaRepository<Unit, Long> {
 
     boolean existsByShortName(String shortName);
 
-    Optional<Unit> findByName(String name);
+    boolean existsByNameAndIdNot(String name, Long id);
+
+    boolean existsByShortNameAndIdNot(String shortName, Long id);
+
+    List<Unit> findByStatus(String status);
+
+    Optional<Unit> findByIdAndStatus(Long id, String status);
 }
