@@ -30,6 +30,10 @@ From the project directory, run the Maven wrapper:
 On macOS or Linux, use:
 
 ```bash
+export DB_URL="jdbc:postgresql://localhost:5432/hardware_management"
+export DB_USERNAME="postgres"
+export DB_PASSWORD="your-strong-password"
+
 ./mvnw spring-boot:run
 ```
 
